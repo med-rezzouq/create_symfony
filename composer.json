@@ -1,0 +1,20 @@
+{
+    "name": "medre/create_symfony",
+    "require-dev": {
+        "phpunit/phpunit": "^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Medre\\CreateSymfony\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "rezzouq",
+            "email": "mohammed.rezzouq@siway.ma"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "^5.4"
+    }
+}
