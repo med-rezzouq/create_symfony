@@ -4,6 +4,8 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 
@@ -19,7 +21,8 @@ require __DIR__ . '/../src/routes.php';
 $context = new RequestContext();
 $context->fromRequest($request);
 $urlMatcher = new UrlMatcher($routes, $context);
-
+$controllerResolver = new ControllerResolver();
+$argumentResolver = new ArgumentResolver();
 
 
 
@@ -32,7 +35,11 @@ try {
     $resultat = ($urlMatcher->match($request->getPathInfo()));
     $request->attributes->add($resultat);
 
-    $response = call_user_func($resultat['_controller'], $request);
+    $controller = $controllerResolver->getController($request);
+
+    $arguments = $argumentResolver->getArguments($request, $controller);
+
+    $response = call_user_func_array($controller, $arguments);
 
     //par default l'instance new response(param) le param sera envoyé à setContent()
     //  $response->setContent(ob_get_clean());
